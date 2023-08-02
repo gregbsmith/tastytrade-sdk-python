@@ -10,3 +10,6 @@ A python wrapper around the [tastytrade open API](https://developer.tastytrade.c
 For users: [Official Documentation](https://tastytrade.github.io/tastytrade-sdk-python)
 
 For contributors: [Developer Guide](./docs/contributors/README.md)
+
+TODO:
+[ ] Switch to new multiplexors for market data streaming: https://developer.tastytrade.com/streaming-market-data/
