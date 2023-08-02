@@ -19,12 +19,23 @@ class RequestsSession:
     def __init__(self, config: Config):
         self.__base_url = f'https://{config.api_base_url}'
 
-    def login(self, login: str, password: str) -> None:
-        self.__session.headers['Authorization'] = self.request(
+    def login(self, login: str, password: str, remember_token: str, remember_me: bool) -> None:
+        data={'login':login}
+        if password:
+            data['password'] = password
+        else:
+            data['remember-token'] = remember_token
+        data['remember-me'] = remember_me
+        response = self.request(
             'POST',
             '/sessions',
-            data={'login': login, 'password': password}
-        )['data']['session-token']
+            json=data,
+        )['data']
+
+        self.__session.headers['Authorization'] = response['session-token']
+        if remember_me:
+            # Is Session.params the best place to keep this?
+            self.__session.params['remember-token'] = response['remember-token']
 
     def request(self, method: str, path: str, params: Optional[QueryParams] = tuple(),
                 data: Optional[dict] = None) -> Optional[dict]:
