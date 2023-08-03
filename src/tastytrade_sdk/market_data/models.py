@@ -35,29 +35,6 @@ class Quote:
         self.ask_size = _float(ask_size)
         self.ask_exchange_code = ask_exchange_code
 
-
-@dataclass
-class Candle:
-    symbol: str
-    time: int
-    open: Optional[float]
-    high: Optional[float]
-    low: Optional[float]
-    close: Optional[float]
-    volume: Optional[float]
-
-    def __init__(self, symbol: str, time: int, _open: NullableFloatStr, high: NullableFloatStr, low: NullableFloatStr,
-                 close: NullableFloatStr, volume: NullableFloatStr):
-        """@private"""
-        self.symbol = symbol
-        self.time = time
-        self.open = _float(_open)
-        self.high = _float(high)
-        self.low = _float(low)
-        self.close = _float(close)
-        self.volume = _float(volume)
-
-
 @dataclass
 class Greeks:
     symbol: str
