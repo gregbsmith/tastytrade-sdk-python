@@ -13,3 +13,7 @@ For contributors: [Developer Guide](./docs/contributors/README.md)
 
 TODO:
 - [ ] Switch to new multiplexors for market data streaming: https://developer.tastytrade.com/streaming-market-data/
+	- must change:
+		models.py
+		market_data.py
+		subscription.py
