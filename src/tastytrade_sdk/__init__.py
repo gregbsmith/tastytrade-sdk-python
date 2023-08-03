@@ -12,6 +12,6 @@ __all__ = [
 
 from tastytrade_sdk.api import Api, QueryParams
 from tastytrade_sdk.market_data.market_data import MarketData
-from tastytrade_sdk.market_data.models import Quote, Candle, Greeks
+from tastytrade_sdk.market_data.models import Quote, Greeks
 from tastytrade_sdk.market_data.subscription import Subscription
 from tastytrade_sdk.tastytrade import Tastytrade
