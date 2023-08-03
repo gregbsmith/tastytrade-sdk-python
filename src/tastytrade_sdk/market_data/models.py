@@ -16,6 +16,7 @@ def _float(value: NullableFloatStr) -> Optional[float]:
 @dataclass
 class Profile:
     """ Attributes not handled here:
+        eventSymbol
         shortSaleRestriction
         tradingStatus
         statusReason
@@ -51,6 +52,8 @@ class Profile:
 
 @dataclass
 class Quote:
+    """ Attributes not handled here:
+        """
     symbol: str
     bid_price: Optional[float]
     bid_size: Optional[float]
@@ -70,6 +73,41 @@ class Quote:
         self.ask_price = _float(ask_price)
         self.ask_size = _float(ask_size)
         self.ask_exchange_code = ask_exchange_code
+
+@dataclass
+class Summary:
+    """ Attributes not handled here:
+        dayClosePriceType
+        prevDayClosePriceType
+        """
+    symbol: str
+    eventSymbol: str
+    dayId: int
+    dayOpen: float
+    dayHigh: float
+    dayLow: float
+    dayClose: float
+    prevDayId: int
+    prevClose: float
+    prevDayVolume: float
+    openInterest: int
+
+    def __init__(self, symbol: str, eventSymbol: str, dayId: int, dayOpen: float, dayHigh:float,
+                 dayLow: float, dayClose: float, prevDayId: int, prevClose: float,
+                 prevDayVolume: float, openInterest: int):
+        self.symbol = symbol
+        self.eventSymbol = eventSymbol
+        self.dayId = dayId
+        self.dayOpen = dayOpen
+        self.dayHigh = dayHigh
+        self.dayLow = dayLow
+        self.dayClose = dayClose
+        self.prevDayId = prevDayId
+        self.prevClose = prevClose
+        self.prevDayVolume = prevDayVolume
+        self.openInterest = openInterest
+
+
 
 @dataclass
 class Greeks:

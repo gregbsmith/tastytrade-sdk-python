@@ -17,3 +17,7 @@ TODO:
 		models.py
 		market_data.py
 		subscription.py
+
+How to get your remember-token:
+
+tasty.api.\_Api\_\_session.\_RequestsSession\_\_session.params['remember-token']
