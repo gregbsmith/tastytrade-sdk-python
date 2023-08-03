@@ -5,7 +5,7 @@ from injector import inject
 from tastytrade_sdk.api import Api
 from tastytrade_sdk.market_data.streamer_symbol_translation import StreamerSymbolTranslationsFactory
 from tastytrade_sdk.market_data.subscription import Subscription
-from tastytrade_sdk.market_data.models import Quote, Greeks
+from tastytrade_sdk.market_data.models import Profile, Quote, Greeks
 
 
 class MarketData:
@@ -19,11 +19,13 @@ class MarketData:
         self.__api = api
         self.__streamer_symbol_translations_factory = streamer_symbol_translations_factory
 
-    def subscribe(self, symbols: List[str], on_quote: Optional[Callable[[Quote], None]] = None,
+    def subscribe(self, symbols: List[str], on_profile: Optional[Callable[[Profile], None]] = None,
+                  on_quote: Optional[Callable[[Quote], None]] = None,
                   on_greeks: Optional[Callable[[Greeks], None]] = None) -> Subscription:
         """
         Subscribe to live feed data
         :param symbols: Symbols to subscribe to. Can be across multiple instrument types.
+        :param on_profile: Handle for `Profile` events
         :param on_quote: Handler for `Quote` events
         :param on_greeks: Handler for `Greeks` events
         """
@@ -32,6 +34,7 @@ class MarketData:
             data['dxlink-url'],
             data['token'],
             self.__streamer_symbol_translations_factory.create(symbols),
+            on_profile,
             on_quote,
             on_greeks
         )

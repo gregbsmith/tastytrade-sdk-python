@@ -14,6 +14,42 @@ def _float(value: NullableFloatStr) -> Optional[float]:
 
 
 @dataclass
+class Profile:
+    """ Attributes not handled here:
+        shortSaleRestriction
+        tradingStatus
+        statusReason
+        haltStartTime
+        haltEndTime
+        highLimitPrice
+        lowLimitPrice
+        """
+    symbol: str
+    description: str
+    hi52wk: float
+    lo52wk: float
+    beta: float
+    earningsPerShare: float
+    dividendFreq: float
+    exDividendAmount: float
+    shares: float # outstanding shares
+    freeFloat: float
+    def __init__(self, symbol: str, description: str, hi52wk: float, lo52wk: float,
+                 beta: float, earningsPerShare: float, dividendFreq: float,
+                 exDividendAmount: float, shares: float, freeFloat: float):
+        self.symbol = symbol
+        self.description = description
+        self.hi52wk = hi52wk
+        self.lo52wk = lo52wk
+        self.beta = beta
+        self.earningsPerShare = earningsPerShare
+        self.dividendFreq = dividendFreq
+        self.exDividendAmount = exDividendAmount
+        self.shares = shares
+        self.freeFloat = freeFloat
+
+
+@dataclass
 class Quote:
     symbol: str
     bid_price: Optional[float]

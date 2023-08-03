@@ -10,7 +10,7 @@ from websockets.exceptions import ConnectionClosedOK
 from websockets.sync.client import connect, ClientConnection
 
 from tastytrade_sdk.exceptions import TastytradeSdkException, InvalidArgument
-from tastytrade_sdk.market_data.models import Quote, Greeks
+from tastytrade_sdk.market_data.models import Profile, Quote, Greeks
 from tastytrade_sdk.market_data.streamer_symbol_translation import StreamerSymbolTranslations
 
 
@@ -45,16 +45,18 @@ class Subscription:
     __is_authorized: bool = False
 
     def __init__(self, url: str, token: str, streamer_symbol_translations: StreamerSymbolTranslations,
+                 on_profile: Optional[Callable[[Profile], None]] = None,
                  on_quote: Optional[Callable[[Quote], None]] = None,
                  on_greeks: Optional[Callable[[Greeks], None]] = None):
         """@private"""
 
-        if not (on_quote or on_greeks):
+        if not (on_profile or on_quote or on_greeks):
             raise InvalidArgument('At least one feed event handler must be provided')
 
         self.__url = url
         self.__token = token
         self.__streamer_symbol_translations = streamer_symbol_translations
+        self.__on_profile = on_profile
         self.__on_quote = on_quote
         self.__on_greeks = on_greeks
 
@@ -64,6 +66,8 @@ class Subscription:
         self.__receive_thread = LoopThread(self.__receive)
 
         subscription_types = []
+        if self.__on_profile:
+            subscription_types.append('Profile')
         if self.__on_quote:
             subscription_types.append('Quote')
         if self.__on_greeks:
@@ -113,6 +117,19 @@ class Subscription:
     def __handle_feed_event(self, event: dict) -> None:
         event_type = event['eventType']
         original_symbol = self.__streamer_symbol_translations.get_original_symbol(event['eventSymbol'])
+        if event_type == 'Profile' and self.__on_profile:
+            self.__on_profile(Profile(
+                symbol=original_symbol,
+                description=event['description']
+                hi52wk=event['high52WeekPrice']
+                lo52wk=event['low52WeekPrice']
+                beta=event['beta']
+                earningsPerShare=event['earningsPerShare']
+                dividendFreq=event['dividendFrequency']
+                exDividendAmount=event['exDividendAmount']
+                shares=event['shares']
+                freeFloat=event['freeFloat']
+            ))
         if event_type == 'Quote' and self.__on_quote:
             self.__on_quote(Quote(
                 symbol=original_symbol,
