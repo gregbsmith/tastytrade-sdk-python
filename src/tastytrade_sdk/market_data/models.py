@@ -113,6 +113,8 @@ class Trade:
         time
         timeNanoPart
         tickDirection
+        sizeAsDouble
+        dayVolumeAsDouble
         """
     symbol: str
     eventSymbol: str
@@ -121,15 +123,13 @@ class Trade:
     price: Optional[float]
     change: Optional[float]
     size: int
-    sizeAsDecimal: Optional[float]
     extendedTradingHours: bool
     dayId: int
     dayVolume: int
-    dayVolumeAsDecimal: Optional[float]
     dayTurnover: Optional[float]
     def __init__(self, symbol: str, eventSymbol: str, sequence: int, exchangeCode: str, price: NullableFloatStr,
-                 change: NullableFloatStr, size: int, sizeAsDecimal: NullableFloatStr, extendedTradingHours: bool,
-                 dayId: int, dayVolume: int, dayVolumeAsDecimal: NullableFloatStr, dayTurnover: NullableFloatStr):
+                 change: NullableFloatStr, size: int, extendedTradingHours: bool, dayId: int, dayVolume: int,
+                 dayTurnover: NullableFloatStr):
         self.symbol = symbol
         self.eventSymbol = eventSymbol
         self.sequence = sequence
@@ -137,11 +137,9 @@ class Trade:
         self.price = _float(price)
         self.change = _float(change)
         self.size = size
-        self.sizeAsDecimal = _float(sizeAsDecimal)
         self.extendedTradingHours = extendedTradingHours
         self.dayId = dayId
         self.dayVolume = dayVolume
-        self.dayVolumeAsDecimal = _float(dayVolumeAsDecimal)
         self.dayTurnover = _float(dayTurnover)
 
 @dataclass

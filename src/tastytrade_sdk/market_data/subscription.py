@@ -171,11 +171,9 @@ class Subscription:
                 price=event['price'],
                 change=event['change'],
                 size=event['size'],
-                sizeAsDecimal=event['sizeAsDouble'],
                 extendedTradingHours=event['extendedTradingHours'],
                 dayId=event['dayId'],
                 dayVolume=event['dayVolume'],
-                dayVolumeAsDecimal=event['dayVolumeAsDouble'],
                 dayTurnover=event['dayTurnover']
             ))
         elif event_type == 'Greeks' and self.__on_greeks:
