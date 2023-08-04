@@ -84,7 +84,7 @@ class Subscription:
         subscriptions = [{'symbol': s, 'type': t} for s, t in
                          product(self.__streamer_symbol_translations.streamer_symbols, subscription_types)]
 
-        self.__send('SETUP', version='0.1-js/1.0.0')
+        self.__send('SETUP', version='0.1', keepaliveTimeout=60, acceptKeepaliveTimeout=60)#, version='0.1-js/1.0.0')
         self.__send('AUTH', token=self.__token)
         while not self.__is_authorized:
             continue
@@ -111,14 +111,20 @@ class Subscription:
         _type = message['type']
         if _type == 'ERROR':
             raise StreamerException(message['error'], message['message'])
-        if _type == 'SETUP':
+        if _type == 'SETUP': # also contains a more specific version number
             keepalive_interval = floor(message['keepaliveTimeout'] / 2)
             self.__keepalive_thread = LoopThread(lambda: self.__send('KEEPALIVE'), keepalive_interval)
-        elif _type == 'AUTH_STATE':
+        elif _type == 'AUTH_STATE': # userId is returned here on 'AUTHORIZED' message
             self.__is_authorized = message['state'] == 'AUTHORIZED'
         elif _type == 'FEED_DATA':
             for event in message['data']:
                 self.__handle_feed_event(event)
+        #elif _type == 'CHANNEL_OPENED': # Why is this returned twice?
+            #pass # what is subFormat parameter returned here?
+        #elif _type == 'FEED_CONFIG':
+            #pass
+        #elif _type == 'KEEPALIVE': # shouldn't be necessary since self.__keepalive_thread
+            #self.__send('KEEPALIVE') # is created
         else:
             logging.debug('Unhandled message type: %s', _type)
 
