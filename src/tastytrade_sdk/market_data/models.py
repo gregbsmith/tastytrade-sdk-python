@@ -27,27 +27,27 @@ class Profile:
         """
     symbol: str
     description: str
-    hi52wk: float
-    lo52wk: float
-    beta: float
-    earningsPerShare: float
-    dividendFreq: float
-    exDividendAmount: float
-    shares: float # outstanding shares
-    freeFloat: float
-    def __init__(self, symbol: str, description: str, hi52wk: float, lo52wk: float,
-                 beta: float, earningsPerShare: float, dividendFreq: float,
-                 exDividendAmount: float, shares: float, freeFloat: float):
+    hi52wk: Optional[float]
+    lo52wk: Optional[float]
+    beta: Optional[float]
+    earningsPerShare: Optional[float]
+    dividendFreq: Optional[float]
+    exDividendAmount: Optional[float]
+    shares: Optional[float] # outstanding shares
+    freeFloat: Optional[float]
+    def __init__(self, symbol: str, description: str, hi52wk: NullableFloatStr, lo52wk: NullableFloatStr,
+                 beta: NullableFloatStr, earningsPerShare: NullableFloatStr, dividendFreq: NullableFloatStr,
+                 exDividendAmount: NullableFloatStr, shares: NullableFloatStr, freeFloat: NullableFloatStr):
         self.symbol = symbol
         self.description = description
-        self.hi52wk = hi52wk
-        self.lo52wk = lo52wk
-        self.beta = beta
-        self.earningsPerShare = earningsPerShare
-        self.dividendFreq = dividendFreq
-        self.exDividendAmount = exDividendAmount
-        self.shares = shares
-        self.freeFloat = freeFloat
+        self.hi52wk = _float(hi52wk)
+        self.lo52wk = _float(lo52wk)
+        self.beta = _float(beta)
+        self.earningsPerShare = _float(earningsPerShare)
+        self.dividendFreq = _float(dividendFreq)
+        self.exDividendAmount = _float(exDividendAmount)
+        self.shares = _float(shares)
+        self.freeFloat = _float(freeFloat)
 
 
 @dataclass
@@ -83,31 +83,66 @@ class Summary:
     symbol: str
     eventSymbol: str
     dayId: int
-    dayOpen: float
-    dayHigh: float
-    dayLow: float
-    dayClose: float
+    dayOpen: Optional[float]
+    dayHigh: Optional[float]
+    dayLow: Optional[float]
+    dayClose: Optional[float]
     prevDayId: int
-    prevClose: float
-    prevDayVolume: float
+    prevClose: Optional[float]
+    prevDayVolume: Optional[float]
     openInterest: int
 
-    def __init__(self, symbol: str, eventSymbol: str, dayId: int, dayOpen: float, dayHigh:float,
-                 dayLow: float, dayClose: float, prevDayId: int, prevClose: float,
-                 prevDayVolume: float, openInterest: int):
+    def __init__(self, symbol: str, eventSymbol: str, dayId: int, dayOpen: NullableFloatStr, dayHigh:NullableFloatStr,
+                 dayLow: NullableFloatStr, dayClose: NullableFloatStr, prevDayId: int, prevClose: NullableFloatStr,
+                 prevDayVolume: NullableFloatStr, openInterest: int):
         self.symbol = symbol
         self.eventSymbol = eventSymbol
         self.dayId = dayId
-        self.dayOpen = dayOpen
-        self.dayHigh = dayHigh
-        self.dayLow = dayLow
-        self.dayClose = dayClose
+        self.dayOpen = _float(dayOpen)
+        self.dayHigh = _float(dayHigh)
+        self.dayLow = _float(dayLow)
+        self.dayClose = _float(dayClose)
         self.prevDayId = prevDayId
-        self.prevClose = prevClose
-        self.prevDayVolume = prevDayVolume
+        self.prevClose = _float(prevClose)
+        self.prevDayVolume = _float(prevDayVolume)
         self.openInterest = openInterest
 
-
+@dataclass
+class Trade:
+    """ Attributes not handled here:
+        time
+        timeNanoPart
+        tickDirection
+        """
+    symbol: str
+    eventSymbol: str
+    sequence: int
+    exchangeCode: str
+    price: Optional[float]
+    change: Optional[float]
+    size: int
+    sizeAsDecimal: Optional[float]
+    extendedTradingHours: bool
+    dayId: int
+    dayVolume: int
+    dayVolumeAsDecimal: Optional[float]
+    dayTurnover: Optional[float]
+    def __init__(self, symbol: str, eventSymbol: str, sequence: int, exchangeCode: str, price: NullableFloatStr,
+                 change: NullableFloatStr, size: int, sizeAsDecimal: NullableFloatStr, extendedTradingHours: bool,
+                 dayId: int, dayVolume: int, dayVolumeAsDecimal: NullableFloatStr, dayTurnover: NullableFloatStr):
+        self.symbol = symbol
+        self.eventSymbol = eventSymbol
+        self.sequence = sequence
+        self.exchangeCode = exchangeCode
+        self.price = _float(price)
+        self.change = _float(change)
+        self.size = size
+        self.sizeAsDecimal = _float(sizeAsDecimal)
+        self.extendedTradingHours = extendedTradingHours
+        self.dayId = dayId
+        self.dayVolume = dayVolume
+        self.dayVolumeAsDecimal = _float(dayVolumeAsDecimal)
+        self.dayTurnover = _float(dayTurnover)
 
 @dataclass
 class Greeks:

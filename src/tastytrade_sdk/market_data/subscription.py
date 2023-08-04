@@ -10,7 +10,7 @@ from websockets.exceptions import ConnectionClosedOK
 from websockets.sync.client import connect, ClientConnection
 
 from tastytrade_sdk.exceptions import TastytradeSdkException, InvalidArgument
-from tastytrade_sdk.market_data.models import Profile, Quote, Summary, Greeks
+from tastytrade_sdk.market_data.models import Profile, Quote, Summary, Trade, Greeks
 from tastytrade_sdk.market_data.streamer_symbol_translation import StreamerSymbolTranslations
 
 
@@ -48,10 +48,11 @@ class Subscription:
                  on_profile: Optional[Callable[[Profile], None]] = None,
                  on_quote: Optional[Callable[[Quote], None]] = None,
                  on_summary: Optional[Callable[[Summary], None]] = None,
+                 on_trade: Optional[Callable[[Trade], None]] = None,
                  on_greeks: Optional[Callable[[Greeks], None]] = None):
         """@private"""
 
-        if not (on_profile or on_quote or on_summary or on_greeks):
+        if not (on_profile or on_quote or on_summary or on_trade or on_greeks):
             raise InvalidArgument('At least one feed event handler must be provided')
 
         self.__url = url
@@ -60,6 +61,7 @@ class Subscription:
         self.__on_profile = on_profile
         self.__on_quote = on_quote
         self.__on_summary = on_summary
+        self.__on_trade = on_trade
         self.__on_greeks = on_greeks
 
     def open(self) -> 'Subscription':
@@ -74,6 +76,8 @@ class Subscription:
             subscription_types.append('Quote')
         if self.__on_summary:
             subscription_types.append('Summary')
+        if self.__on_trade:
+            subscription_types.append('Trade')
         if self.__on_greeks:
             subscription_types.append('Greeks')
 
@@ -157,6 +161,22 @@ class Subscription:
                 prevClose=event['prevDayClosePrice'],
                 prevDayVolume=event['prevDayVolume'],
                 openInterest=event['openInterest']
+            ))
+        elif event_type == 'Trade' and self.__on_trade:
+            self.__on_trade(Trade(
+                symbol=original_symbol,
+                eventSymbol=event['eventSymbol'],
+                sequence=event['sequence'],
+                exchangeCode=event['exchangeCode'],
+                price=event['price'],
+                change=event['change'],
+                size=event['size'],
+                sizeAsDecimal=event['sizeAsDouble'],
+                extendedTradingHours=event['extendedTradingHours'],
+                dayId=event['dayId'],
+                dayVolume=event['dayVolume'],
+                dayVolumeAsDecimal=event['dayVolumeAsDouble'],
+                dayTurnover=event['dayTurnover']
             ))
         elif event_type == 'Greeks' and self.__on_greeks:
             self.__on_greeks(Greeks(
