@@ -10,13 +10,14 @@ class Tastytrade:
     The SDK's top-level class
     """
 
-    def __init__(self, api_base_url: str = 'api.tastyworks.com'):
+    def __init__(self, sandbox=False):
         """
-        :param api_base_url: Optionally override the base URL used by the API
-        (when using the sandbox/cert environment)
-        cert url is 'api.cert.tastyworks.com'
+        :param sandbox: allow the user to specify sandbox mode to change api base url to
+        cert url, which is 'api.cert.tastyworks.com'
         """
-
+        api_base_url = 'api.tastyworks.com'
+        if sandbox:
+            api_base_url = 'api.cert.tastyworks.com'
         def configure(binder):
             binder.bind(Config, to=Config(api_base_url=api_base_url))
 
