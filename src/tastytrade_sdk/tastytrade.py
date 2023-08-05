@@ -42,6 +42,9 @@ class Tastytrade:
                                                         remember_me=remember_me)
         else:
             print("Error: failed to log in. You must provide a password or valid remember token to log in.")
+            return self
+
+        self.accounts = self.api.get('/customers/me/accounts')['data']['items']
         return self
 
     def logout(self) -> None:
