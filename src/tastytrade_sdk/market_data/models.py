@@ -117,8 +117,7 @@ class Trade:
         """
     symbol: str
     eventSymbol: str
-    # seconds since dt.datetime.utcfromtimestamp(0)
-    time: int
+    time: int # seconds since dt.datetime.utcfromtimestamp(0)
     sequence: int
     exchangeCode: str
     price: Optional[float]
