@@ -173,6 +173,8 @@ class Subscription:
                 symbol=original_symbol,
                 eventSymbol=event['eventSymbol'],
                 time=event['time'] / 1000, # necessary to convert to sec
+                # ^^^ very important that this step is done once
+                # and nowhere else ***
                 sequence=event['sequence'],
                 exchangeCode=event['exchangeCode'],
                 price=event['price'],
