@@ -12,6 +12,7 @@ For users: [Official Documentation](https://tastytrade.github.io/tastytrade-sdk-
 For contributors: [Developer Guide](./docs/contributors/README.md)
 
 TODO:
+- [ ] Add support for placing orders
 - [x] Switch to new multiplexors for market data streaming: https://developer.tastytrade.com/streaming-market-data/
 	- must change:
 		models.py
