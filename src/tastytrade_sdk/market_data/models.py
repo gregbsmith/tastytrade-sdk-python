@@ -110,14 +110,15 @@ class Summary:
 @dataclass
 class Trade:
     """ Attributes not handled here:
-        time
-        timeNanoPart
+        timeNanoPart (it always seems to be 0)
         tickDirection
         sizeAsDouble
         dayVolumeAsDouble
         """
     symbol: str
     eventSymbol: str
+    # seconds since dt.datetime.utcfromtimestamp(0)
+    time: int
     sequence: int
     exchangeCode: str
     price: Optional[float]
@@ -127,11 +128,12 @@ class Trade:
     dayId: int
     dayVolume: int
     dayTurnover: Optional[float]
-    def __init__(self, symbol: str, eventSymbol: str, sequence: int, exchangeCode: str, price: NullableFloatStr,
-                 change: NullableFloatStr, size: int, extendedTradingHours: bool, dayId: int, dayVolume: int,
-                 dayTurnover: NullableFloatStr):
+    def __init__(self, symbol: str, eventSymbol: str, time: int, sequence: int, exchangeCode: str,
+                 price: NullableFloatStr, change: NullableFloatStr, size: int, extendedTradingHours: bool,
+                 dayId: int, dayVolume: int, dayTurnover: NullableFloatStr):
         self.symbol = symbol
         self.eventSymbol = eventSymbol
+        self.time = time
         self.sequence = sequence
         self.exchangeCode = exchangeCode
         self.price = _float(price)

@@ -172,6 +172,7 @@ class Subscription:
             self.__on_trade(Trade(
                 symbol=original_symbol,
                 eventSymbol=event['eventSymbol'],
+                time=event['time'] / 1000, # necessary to convert to sec
                 sequence=event['sequence'],
                 exchangeCode=event['exchangeCode'],
                 price=event['price'],
