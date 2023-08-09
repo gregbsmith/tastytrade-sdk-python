@@ -1,3 +1,4 @@
+import datetime as dt
 import logging
 import threading
 import time
@@ -172,7 +173,8 @@ class Subscription:
             self.__on_trade(Trade(
                 symbol=original_symbol,
                 eventSymbol=event['eventSymbol'],
-                time=event['time'] / 1000, # necessary to convert to sec
+                # necessary to convert to sec then datetime
+                time=dt.datetime.utcfromtimestamp(event['time'] / 1000),
                 # ^^^ very important that this step is done once
                 # and nowhere else ***
                 sequence=event['sequence'],

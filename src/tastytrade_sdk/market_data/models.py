@@ -1,3 +1,4 @@
+import datetime as dt
 from dataclasses import dataclass
 from math import isnan
 from typing import Optional, Union
@@ -117,7 +118,7 @@ class Trade:
         """
     symbol: str
     eventSymbol: str
-    time: int # seconds since dt.datetime.utcfromtimestamp(0)
+    time: dt.datetime
     sequence: int
     exchangeCode: str
     price: Optional[float]
@@ -127,7 +128,7 @@ class Trade:
     dayId: int
     dayVolume: int
     dayTurnover: Optional[float]
-    def __init__(self, symbol: str, eventSymbol: str, time: int, sequence: int, exchangeCode: str,
+    def __init__(self, symbol: str, eventSymbol: str, time: dt.datetime, sequence: int, exchangeCode: str,
                  price: NullableFloatStr, change: NullableFloatStr, size: int, extendedTradingHours: bool,
                  dayId: int, dayVolume: int, dayTurnover: NullableFloatStr):
         self.symbol = symbol
